@@ -28,9 +28,7 @@ const authOptions: NextAuthOptions = {
             if (user) {
               const isValidPassword = await bcrypt.compare(password, user.password);
               if (isValidPassword) {
-                return {
-                  name: user.username,
-                }
+                return user as any;
               }
               return null;
             }
@@ -39,6 +37,15 @@ const authOptions: NextAuthOptions = {
           },
         }),
     ],
+    callbacks: {
+      async jwt({ token, user }) {
+        return { ...token, ...user };
+      },
+      async session({ session, token, user }) {
+        session.user = token;
+        return session;
+      }
+    }
 }
 
 export default NextAuth(authOptions);

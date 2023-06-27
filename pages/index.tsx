@@ -36,7 +36,7 @@ export const getServerSideProps: GetServerSideProps<
 
 export default function Home({
   isConnected,
-}) {
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
   return (
     <div className="container">

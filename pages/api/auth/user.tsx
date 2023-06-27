@@ -1,8 +1,16 @@
 import { scryptSync } from "crypto";
 import clientPromise from "../../../lib/mongodb";
 import bcrypt from 'bcryptjs';
+import { NextApiRequest, NextApiResponse } from "next";
 
-export default async (req, res) => {
+interface ExtendedNextAPiRequest extends NextApiRequest {
+    body: {
+        username: string;
+        password: string;
+    }
+}
+
+export default async (req: ExtendedNextAPiRequest, res: NextApiResponse) => {
     const client = await clientPromise;
     const db = client.db('relayDB');
 

@@ -3,7 +3,7 @@ import { useState } from "react";
 const SignInPage = () => {
     const [userInfo, setUserInfo] = useState({ username: '', password: '' });
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async(e: any) => {
         e.preventDefault();
 
         console.log(userInfo.username, userInfo.password)
