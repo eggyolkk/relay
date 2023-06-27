@@ -1,7 +1,4 @@
-import { useEffect, useState } from "react";
-import { signIn } from 'next-auth/react';
-import Router from "next/router";
-import bcrypt from 'bcrypt';
+import { useState } from "react";
 
 const SignInPage = () => {
     const [userInfo, setUserInfo] = useState({ username: '', password: '' });
