@@ -3,14 +3,15 @@ import Link from "next/link";
 import Router from "next/router";
 import { useEffect } from "react";
 import { signOut } from 'next-auth/react';
+import Servers from "../components/Servers";
 
-const Protected = () => {
+const Dashboard = () => {
     const { status, data } = useSession();
 
     useEffect(() => {
         console.log('data/status', data, status)
         if (status === 'unauthenticated') {
-            Router.replace('/login');
+            Router.replace('/');
         }
     }, [status])
 
@@ -20,18 +21,18 @@ const Protected = () => {
 
     if (status === 'authenticated') {
         return (
-            <div>
-                You are authorised to view this page! {JSON.stringify(data)}
+            <div className='main-wrapper'>
+                <Servers />
                 <button onClick={logoutUser}>Logout</button>
             </div>
         )
     }
 
     return (
-        <div>
+        <div className='main-wrapper'>
             <p>Loading</p>
         </div>
     )
 }
 
-export default Protected;
+export default Dashboard;

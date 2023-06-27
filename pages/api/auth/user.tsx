@@ -48,8 +48,8 @@ export default async (req: ExtendedNextAPiRequest, res: NextApiResponse) => {
 
             // If username already exists in db, throw error
             if (existingUsername) {
-                res.status(400);
-                res.json('Username is already taken');
+                res.statusMessage = 'Username already exists.'
+                res.status(409).end();
             }
             // Otherwise, create user
             else {

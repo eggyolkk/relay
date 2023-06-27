@@ -1,10 +1,11 @@
-.homepage {
+.main-wrapper {
     width: 100%;
     height: 100vh;
     display: flex;
+    background: #16171b;
     
     .left-container {
-        background: #646099;
+        background: linear-gradient(0deg, #4f3fc3 0%, #646099 100%);
         height: 100%;
         width: 50%;
         display: flex;
@@ -36,6 +37,11 @@
         justify-content: center;
         align-items: center;
 
+        .animate-div {
+            display: flex;
+            flex-direction: column;
+        }
+
         form {
             display: flex;
             flex-direction: column;
@@ -51,18 +57,18 @@
         }
 
         .subtext {
-            color: #7a8193;
+            color: $subtext-grey;
             font-weight: 500;
             margin: 0 0 30px 0;
+            width: 280px;
         }
 
         .input-field {
             background: black;
             border: 0;
-            margin-bottom: 10px;
             color: white;
-            padding: 10px 20px;
-            width: 250px;
+            padding: 10px 20px 10px 50px;
+            width: 230px;
             border-radius: 10px;
             outline: black;
 
@@ -72,8 +78,37 @@
             }
         }
 
+        .input-container {
+            position: relative;
+
+            svg {
+                position: absolute;
+                color: white;
+                left: 15px;
+                top: 4px;
+                width: 20px;
+                opacity: 0.5;
+
+                &.toggle-password {
+                    left: auto;
+                    right: 10px;
+                    cursor: pointer;
+
+                    &:hover {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+
+        .error {
+            color: $subtext-grey;
+            margin: 5px 0 10px 0;
+            font-size: 14px;
+        }
+
         .login-button {
-            background: #646099;
+            background: $button-purple;
             border: 0;
             color: white;
             font-weight: 600;
@@ -86,7 +121,7 @@
 
             &:hover {
                 transition: background-color 0.1s linear;
-                background: #5127b5;
+                background: $button-purple-hover;
             }
         }
 

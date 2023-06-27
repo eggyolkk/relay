@@ -44,7 +44,7 @@ const authOptions: NextAuthOptions = {
       async session({ session, token, user }) {
         session.user = token;
         return session;
-      }
+      },
     },
     secret: process.env.NEXTAUTH_SECRET,
 }
