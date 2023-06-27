@@ -1,0 +1,39 @@
+// Typography
+@font-face {
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/Rubik/static/Rubik-Regular.ttf');
+}
+@font-face {
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 500;
+    src: url('../fonts/Rubik/static/Rubik-Medium.ttf');
+}
+@font-face {
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 600;
+    src: url('../fonts/Rubik/static/Rubik-SemiBold.ttf');
+}
+@font-face {
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../fonts/Rubik/static/Rubik-Bold.ttf');
+}
+@font-face {
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 800;
+    src: url('../fonts/Rubik/static/Rubik-ExtraBold.ttf');
+}
+
+body {
+    margin: 0;
+
+    * {
+        font-family: 'Rubik';
+    }
+}
