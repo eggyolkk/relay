@@ -1,5 +1,27 @@
 .servers-wrapper {
-    width: 100px;
-    height: 100%;
-    background: white;
+    width: 60px;
+    background: $background-dark-purple;
+    padding: 60px 10px 30px 10px;
+    display: flex;
+    justify-content: center;
+    border-right: 1px solid $border-purple-dark;
+
+    .add-server-icon {
+        background: none;
+        border: 3px solid white;
+        border-radius: 50%;
+        height: 50px;
+        width: 50px;
+        opacity: 0.5;
+        cursor: pointer;
+
+        svg {
+            color: white;
+            font-size: 30px;
+        }
+
+        &:hover {
+            opacity: 1;
+        }
+    }
 }

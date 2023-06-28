@@ -1,7 +1,11 @@
+import AddIcon from '@mui/icons-material/Add';
+
 export default function Servers() {
     return (
         <div className='servers-wrapper'>
-            hi
+            <button className='add-server-icon'>
+                <AddIcon />
+            </button>
         </div>
     )
 }

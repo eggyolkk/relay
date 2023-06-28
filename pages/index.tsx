@@ -1,12 +1,12 @@
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import PersonIcon from '@mui/icons-material/Person';
 import KeyIcon from '@mui/icons-material/Key';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Router from 'next/router';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import Loading from '../components/Loading';
 
 export default function Home () {
     const [userInfo, setUserInfo] = useState({ username: '', password: '' });
@@ -20,6 +20,11 @@ export default function Home () {
         }
     }, [status])
 
+    const clearErrors = () => {
+        setUsernameError('');
+        setPasswordError('');
+    }
+
     const handleSubmit = async(e: any) => {
         e.preventDefault();
 
@@ -31,6 +36,7 @@ export default function Home () {
 
         // Redirect to dashboard if login successful
         if (!res?.error && res?.status === 200) {
+            clearErrors();
             Router.replace('/dashboard');
         }
         else {
@@ -97,7 +103,7 @@ export default function Home () {
                     </div>
                 </>
             :
-            <h1>Loading</h1>
+                <Loading />
             }
         </div>
     )
