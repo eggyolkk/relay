@@ -10,7 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) =>  {
         const messages = await db 
             .collection('messages')
             .find()
-            .toArray();
+            .toArray()
 
         return res.json(messages)
     }

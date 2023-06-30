@@ -3,6 +3,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { useSession } from "next-auth/react";
 import moment from "moment";
 import MessageBubbles from "./common/MessageBubbles";
+import useSWR, { preload } from 'swr';
 
 interface sessionUser {
     _id?: string | null | undefined;
@@ -12,22 +13,23 @@ interface sessionUser {
 }
 
 export default function MessageBoard() {
+    const [mounted, setMounted] = useState(false);
     const [message, setMessage] = useState('');
-    const [messagesList, setMessagesList] = useState([]);
     const { status, data } = useSession();
 
-    useEffect(() => {
-        // Retrieve all messages
-        retrieveMessages();
-    }, [])
-
-    const retrieveMessages = async() => {
+    const messageFetcher = async() => {
         const res = await fetch('/api/messages', {
             method: 'GET',
         })
-        const retrieved = await res.json();
-        setMessagesList(retrieved);
+        const retrieved = await res.json(); 
+        return retrieved;
     }
+
+    const { data: messageData } = useSWR(mounted ? 'messages' : null, messageFetcher, { refreshInterval: 10 });
+
+    useEffect(() => {
+        setMounted(true);
+    }, [])
 
     const handleSubmit = async(e: any) => {
         e.preventDefault();
@@ -42,20 +44,13 @@ export default function MessageBoard() {
                 message: message,
             }
 
-            const res = await fetch('/api/messages', {
+            await fetch('/api/messages', {
                 method: 'POST',
                 body: JSON.stringify(newMessage),
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
-
-            const data2 = await res.json();
-            console.log("DATa", data2);
-
-            if (res.ok && res.status === 200) {
-                retrieveMessages();
-            }
 
             setMessage('');
         }
@@ -64,7 +59,7 @@ export default function MessageBoard() {
     return (
         <div className='message-board-wrapper'>
             <div className='message-bubbles-wrapper'>
-                <MessageBubbles messages={messagesList}/>
+                <MessageBubbles messages={messageData}/>
             </div>
             <form className='message-form-wrapper' onSubmit={handleSubmit}>
                 <input 

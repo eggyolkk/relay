@@ -12,9 +12,11 @@ interface MessageArray {
 export default function MessageBubbles(messageList: any) {
     const messages = messageList.messages;
 
+    console.log("messagebubbles", messages)
+
     return (
         <div className='bubbles'>
-            {messages.map(function(message: Message, i: number){
+            {messages?.map(function(message: Message, i: number){
                 return <p className='message-bubble'key={i}>{message.message}</p>
             })}
         </div>
