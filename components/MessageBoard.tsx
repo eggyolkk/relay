@@ -19,11 +19,16 @@ declare module "next-auth" {
      */
     interface Session {
       user: {
+        exp: number,
+        iat: number,
+        jti: string,
+        passworD: string,
         username: string,
         _id: string,
       }
     }
   }
+  
 
 export default function MessageBoard() {
     const [mounted, setMounted] = useState(false);
@@ -34,6 +39,8 @@ export default function MessageBoard() {
     const [tempMessage, setTempMessage] = useState<String[]>([]);
     const [showTempMessage, setShowTempMessage] = useState(false);
     const { data } = useSession();
+
+    console.log(data)
 
     useEffect(() => {
         // Retrieve all messages on page load
@@ -159,7 +166,6 @@ export default function MessageBoard() {
             // Set temporary message until latest message is fetched
             setShowTempMessage(true);
             const updatedTempMesages = tempMessage.concat(message);
-            console.log("temp", updatedTempMesages)
             setTempMessage(updatedTempMesages);
         }
     }
