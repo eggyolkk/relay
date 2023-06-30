@@ -15,13 +15,27 @@
         opacity: 0.5;
         cursor: pointer;
 
+        @media only screen and (max-width: $max-screen-md) {
+            height: 40px;
+            width: 40px;
+        }
+
         svg {
             color: white;
             font-size: 30px;
+
+            @media only screen and (max-width: $max-screen-md) {
+                font-size: 20px;
+            }
         }
 
         &:hover {
             opacity: 1;
         }
+    }
+
+    @media only screen and (max-width: $max-screen-md) {
+        display: none;
+        padding: 20px 10px 20px 10px;
     }
 }

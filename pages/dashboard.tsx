@@ -23,8 +23,8 @@ const Dashboard = () => {
         return (
             <div className='main-wrapper'>
                 <Servers />
+                <h4 onClick={logoutUser}>Logout</h4>
                 <MessageBoard />
-                <h1 onClick={logoutUser}>Logout</h1>
             </div>
         )
     }

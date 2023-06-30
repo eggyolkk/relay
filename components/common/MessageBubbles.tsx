@@ -34,7 +34,6 @@ export default function MessageBubbles(props: MessageBubblesProps) {
 
         if (isToday) {
             const momentString = momentObj.format('LT');
-            console.log(momentString)
             return momentString;
         }
         else if (isYesterday) {
