@@ -13,21 +13,14 @@ interface Message {
     _id: string
 }
 
-declare module "next-auth" {
-    /**
-     * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
-     */
-    interface Session {
-      user: {
-        exp: number,
-        iat: number,
-        jti: string,
-        passworD: string,
-        username: string,
-        _id: string,
-      }
-    }
-  }
+interface SessionUser {
+    exp: number,
+    iat: number,
+    jti: string,
+    password: string,
+    username: string,
+    _id: string,
+}
   
 
 export default function MessageBoard() {
@@ -39,8 +32,6 @@ export default function MessageBoard() {
     const [tempMessage, setTempMessage] = useState<String[]>([]);
     const [showTempMessage, setShowTempMessage] = useState(false);
     const { data } = useSession();
-
-    console.log(data)
 
     useEffect(() => {
         // Retrieve all messages on page load
@@ -143,12 +134,11 @@ export default function MessageBoard() {
         e.preventDefault();
 
         if (data && message !== '') {
-            const userId = data.user._id;
-            const username = data.user.username;
+            const user = data.user as SessionUser;
 
             const newMessage = {
-                user_id: userId,
-                username: username,
+                user_id: user._id,
+                username: user.username,
                 timestamp: moment().toDate(),
                 message: message,
             }

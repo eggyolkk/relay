@@ -16,9 +16,19 @@ interface MessageBubblesProps {
     data: Session,
 }
 
+interface SessionUser {
+    exp: number,
+    iat: number,
+    jti: string,
+    password: string,
+    username: string,
+    _id: string,
+}
+
 export default function MessageBubbles(props: MessageBubblesProps) {
     const { messages, tempMessage, showTempMessage, data } = props;
     const bottomMessage = useRef<null | HTMLDivElement>(null);
+    const user = data.user as SessionUser;
 
     // Keep screen scrolled to latest message
     const scrollToBottom = () => {
@@ -34,7 +44,7 @@ export default function MessageBubbles(props: MessageBubblesProps) {
             {messages[0]!==undefined ? 
                 <>
                     {messages.map(function(message: Message, i: number){
-                        if (message.user_id === data.user._id) {
+                        if (message.user_id === user._id) {
                             return (
                                 <div className='message-bubble-user' key={i}>
                                     <p className='user'>{message.username}</p>
@@ -58,7 +68,7 @@ export default function MessageBubbles(props: MessageBubblesProps) {
                             {tempMessage.map(function(message: String, i: number) {
                                 return (
                                     <div className='message-bubble-user' key={i} ref={bottomMessage}>
-                                        <p className='user'>{data.user.username}</p>
+                                        <p className='user'>{user.username}</p>
                                         <p className='text'>{message}</p>
                                         <div ref={bottomMessage}></div>
                                     </div>
