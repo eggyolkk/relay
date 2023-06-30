@@ -74,7 +74,7 @@
             width: 100%
         }
         
-        .message-bubble-user {
+        .message-bubble {
             width: fit-content;
             color: white;
             margin: 8px 0;
@@ -86,30 +86,45 @@
                 margin: 0
             }
 
-            .user {
-                margin: 0 0 5px 0;
+            .username {
+                margin: 0 5px 5px 0;
                 text-align: right;
                 font-weight: 600;
             }
+
+            .date {
+                color: $subtext-grey;
+                font-size: 12px;
+
+            }
+
+            .user-time-wrapper {
+                display: flex;
+                align-items: baseline;
+            }
+
+            &.other {
+                margin-right: auto;
+            }
+
+            &.user .user-time-wrapper {
+                justify-content: flex-end;
+            }
         }
 
-        .message-bubble-other {
-            width: fit-content;
-            color: white;
-            margin: 8px 0;
-            margin-right: auto;
-
-            .text {
-                background: #4a4a5f;
-                border: 1px solid #373749;
-                padding: 10px 20px;
-                margin: 0
-            }
-
-            .user {
-                margin: 0 0 5px 0;
-                font-weight: 600;
-            }
+        // Scrollbar
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
+        &::-webkit-scrollbar-track {
+            background: #24242f; 
+        }
+        &::-webkit-scrollbar-thumb {
+            background: #3a3a4f; 
+            border-radius: 50px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background: #484870; 
         }
     }
 }

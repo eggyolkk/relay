@@ -1,6 +1,7 @@
 import { Session } from "next-auth";
 import { useEffect, useRef } from "react";
 import { Message, SessionUser } from "../types";
+import moment from "moment";
 
 interface MessageBubblesProps {
     messages: Message[],
@@ -23,6 +24,27 @@ export default function MessageBubbles(props: MessageBubblesProps) {
         scrollToBottom();
     }, [messages]);    
 
+    const convertToDate = (timestamp: string) => {
+        const dateObj = new Date(timestamp);
+        const momentObj = moment(dateObj);
+        const momentString = momentObj.format('DD/MM/YY h:mm');
+
+        const isToday = momentObj.isSame(moment(), "day");
+        const isYesterday = momentObj.isSame(moment().subtract(1, 'day'), "day");
+
+        if (isToday) {
+            const momentString = momentObj.format('LT');
+            console.log(momentString)
+            return momentString;
+        }
+        else if (isYesterday) {
+            const momentString = momentObj.format('LT');
+            return "Yesterday at " + momentString;
+        }
+
+        return momentString;
+    }
+
     return (
         <div className='message-bubbles-wrapper'>
             <div className='bubbles'>
@@ -31,8 +53,11 @@ export default function MessageBubbles(props: MessageBubblesProps) {
                         {messages.map(function(message: Message, i: number){
                             if (message.user_id === user._id) {
                                 return (
-                                    <div className='message-bubble-user' key={i}>
-                                        <p className='user'>{message.username}</p>
+                                    <div className='message-bubble user' key={i}>
+                                        <div className='user-time-wrapper'>
+                                            <p className='username'>{message.username}</p>
+                                            <p className='date'>{convertToDate(message.timestamp)}</p>
+                                        </div>
                                         <p className='text'>{message.message}</p>
                                         <div ref={bottomMessage}></div>
                                     </div>
@@ -40,8 +65,11 @@ export default function MessageBubbles(props: MessageBubblesProps) {
                             }
                             else {
                                 return (
-                                    <div className='message-bubble-other' key={i}>
-                                        <p className='user'>{message.username}</p>
+                                    <div className='message-bubble other' key={i}>
+                                        <div className='user-time-wrapper'>
+                                            <p className='username'>{message.username}</p>
+                                            <p className='date'>{convertToDate(message.timestamp)}</p>
+                                        </div>
                                         <p className='text'>{message.message}</p>
                                         <div ref={bottomMessage}></div>
                                     </div>
@@ -52,8 +80,12 @@ export default function MessageBubbles(props: MessageBubblesProps) {
                             <>
                                 {tempMessage.map(function(message: String, i: number) {
                                     return (
-                                        <div className='message-bubble-user' key={i} ref={bottomMessage}>
-                                            <p className='user'>{user.username}</p>
+                                        <div className='message-bubble user' key={i} ref={bottomMessage}>
+                                            <div className='user-time-wrapper'>
+                                                <p className='username'>{user.username}</p>
+                                                <p className='date'>{convertToDate(moment().toString())}</p>
+                                            </div>
+                                            
                                             <p className='text'>{message}</p>
                                             <div ref={bottomMessage}></div>
                                         </div>
