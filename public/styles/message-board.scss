@@ -71,15 +71,45 @@
             display: flex;
             flex-direction: column;
             align-items: flex-end;
+            width: 100%
         }
         
-        .message-bubble {
+        .message-bubble-user {
             width: fit-content;
-            background: #2c2c33;
-            padding: 10px 20px;
             color: white;
-            border: 1px solid #373749;
             margin: 8px 0;
+
+            .text {
+                background: #2c2c33;
+                border: 1px solid #373749;
+                padding: 10px 20px;
+                margin: 0
+            }
+
+            .user {
+                margin: 0 0 5px 0;
+                text-align: right;
+                font-weight: 600;
+            }
+        }
+
+        .message-bubble-other {
+            width: fit-content;
+            color: white;
+            margin: 8px 0;
+            margin-right: auto;
+
+            .text {
+                background: #4a4a5f;
+                border: 1px solid #373749;
+                padding: 10px 20px;
+                margin: 0
+            }
+
+            .user {
+                margin: 0 0 5px 0;
+                font-weight: 600;
+            }
         }
     }
 }

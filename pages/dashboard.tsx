@@ -10,7 +10,6 @@ const Dashboard = () => {
     const { status, data } = useSession();
 
     useEffect(() => {
-        console.log('data/status', data, status)
         if (status === 'unauthenticated') {
             Router.replace('/');
         }
