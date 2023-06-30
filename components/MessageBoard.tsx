@@ -7,20 +7,18 @@ import useSWR, { mutate } from 'swr';
 import { Message, SessionUser } from "./types";
   
 export default function MessageBoard() {
-    const [mounted, setMounted] = useState(false);
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState<Message[]>([]);
-    const [prevLatest, setPrevLatest] = useState<Message>();
 
     const [tempMessage, setTempMessage] = useState<String[]>([]);
     const [showTempMessage, setShowTempMessage] = useState(false);
     const { data } = useSession();
 
     useEffect(() => {
-        // Retrieve all messages on page load
         getMessages();
     }, [])
 
+    // Retrieve all messages on page load
     const getMessages = async() => {
         const res = await fetch('/api/messages/latest?count=50', {
             method: 'GET',
@@ -29,6 +27,7 @@ export default function MessageBoard() {
         setMessages(retrieved.reverse());
     }
 
+    // Retrieve most recent messages
     const latestMessagesFetcher = async() => {
         const res = await fetch(`/api/messages/latest?count=50`, {
             method: 'GET',
@@ -36,15 +35,16 @@ export default function MessageBoard() {
         const retrieved = await res.json();
         setTempMessage([]);
 
-        if (retrieved) { 
-            setMessages(retrieved.reverse());
+        // Only set state if there is/are new messages
+        if (JSON.stringify(retrieved.reverse()) !== JSON.stringify(messages)) {
+            setMessages(retrieved);
             setShowTempMessage(false);
         }
+
         return retrieved;
     }
 
-    const { data: latestMessages } = useSWR('latestMessage5', latestMessagesFetcher, { refreshInterval: 10 });
-
+    const { data: latestMessages } = useSWR('latestMessages', latestMessagesFetcher, { refreshInterval: 800, dedupingInterval: 800 });
 
     const fetcher = (...args: [
         "/api/messages", { method: string; body: string; headers: { 'Content-Type': string; }; }
@@ -76,22 +76,20 @@ export default function MessageBoard() {
             mutate('/api/messages');
 
             // Set temporary message until latest message is fetched
-            setShowTempMessage(true);
             const updatedTempMesages = tempMessage.concat(message);
             setTempMessage(updatedTempMesages);
+            setShowTempMessage(true);
         }
     }
 
     return (
         <div className='message-board-wrapper'>
-            <div className='message-bubbles-wrapper'>
-                <MessageBubbles 
-                    messages={messages}
-                    tempMessage={tempMessage}
-                    showTempMessage={showTempMessage}
-                    data={data!}
-                />
-            </div>
+            <MessageBubbles 
+                messages={messages}
+                tempMessage={tempMessage}
+                showTempMessage={showTempMessage}
+                data={data!}
+            />
             <form className='message-form-wrapper' onSubmit={handleSubmit}>
                 <input 
                     className='message-input'
