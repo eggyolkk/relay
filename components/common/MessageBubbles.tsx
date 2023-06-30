@@ -1,28 +1,12 @@
 import { Session } from "next-auth";
 import { useEffect, useRef } from "react";
-
-interface Message {
-    message: string,
-    username: string,
-    timestamp: string,
-    user_id: string,
-    _id: string
-}
+import { Message, SessionUser } from "../types";
 
 interface MessageBubblesProps {
     messages: Message[],
     tempMessage: String[],
     showTempMessage: boolean,
     data: Session,
-}
-
-interface SessionUser {
-    exp: number,
-    iat: number,
-    jti: string,
-    password: string,
-    username: string,
-    _id: string,
 }
 
 export default function MessageBubbles(props: MessageBubblesProps) {

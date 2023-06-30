@@ -3,26 +3,9 @@ import SendIcon from '@mui/icons-material/Send';
 import { useSession } from "next-auth/react";
 import moment from "moment";
 import MessageBubbles from "./common/MessageBubbles";
-import useSWR from 'swr';
-
-interface Message {
-    message: string,
-    username: string,
-    timestamp: string,
-    user_id: string,
-    _id: string
-}
-
-interface SessionUser {
-    exp: number,
-    iat: number,
-    jti: string,
-    password: string,
-    username: string,
-    _id: string,
-}
+import useSWR, { mutate } from 'swr';
+import { Message, SessionUser } from "./types";
   
-
 export default function MessageBoard() {
     const [mounted, setMounted] = useState(false);
     const [message, setMessage] = useState('');
@@ -43,31 +26,10 @@ export default function MessageBoard() {
             method: 'GET',
         })
         const retrieved = await res.json(); 
-        setMessages(retrieved);
+        setMessages(retrieved.reverse());
     }
 
-    // Fetch latest message and add to array of existing messages
-    // (Don't want to request for the whole array every time)
-    const latestMessageFetcher = async() => {
-        // REDO LATER
-        const count = tempMessage.length === 0 ? 1 : tempMessage.length;
-        const res = await fetch(`/api/messages/latest?count=${count}`, {
-            method: 'GET',
-        })
-        const retrieved = await res.json();
-        // Once latest data fetched, hide temporary message and return retrieved data
-        if (retrieved) {
-            setShowTempMessage(false);
-        }
-        // Check if the current fetch has the same value as the last fetched item
-        if (prevLatest !== retrieved[0]) {
-            setPrevLatest(retrieved[0]);
-        }
-        return retrieved;
-    }
-
-    const latestMessageFetcher5 = async() => {
-        // REDO LATER
+    const latestMessagesFetcher = async() => {
         const res = await fetch(`/api/messages/latest?count=50`, {
             method: 'GET',
         })
@@ -75,60 +37,19 @@ export default function MessageBoard() {
         setTempMessage([]);
 
         if (retrieved) { 
-            setMessages(retrieved);
+            setMessages(retrieved.reverse());
             setShowTempMessage(false);
         }
         return retrieved;
     }
 
-    const { data: latestMessage } = useSWR('latestMessage', latestMessageFetcher, { refreshInterval: 100 });
-    const { data: latestMessage5 } = useSWR('latestMessage5', latestMessageFetcher5, { refreshInterval: 100 });
+    const { data: latestMessages } = useSWR('latestMessage5', latestMessagesFetcher, { refreshInterval: 10 });
 
 
-    useEffect(() => {
-        if (latestMessage5) {
-            /*
-            //const sliced = messages.slice(0, -5);
-            //const updated = sliced.concat(latestMessage5.reverse());
-            //setMessages(updated);
-
-            let newArr = [ ...messages ];
-
-            /*
-            messages.forEach((message) => {
-                const existingIndex = latestMessage5.find(a => a._id === message._id);
-                if (existingIndex >= 0) {
-                    newArr[existingIndex] = existingIndex;
-                }
-                else {
-                    newArr.push(latestMessage5);
-                }
-            })
-            
-
-            
-            for (let i=0; i<messages.length; i++) {
-                for (let j=0; j<latestMessage5.length; j++) {
-                    const exists = latestMessage5[j]._id === messages[i]._id;
-
-                    if (exists) {
-                        messages[i] = latestMessage5[j];
-                    }
-                    else {
-                        newArr.push(latestMessage5[j])
-                    }
-                }
-            }
-
-            console.log("new arr2", newArr);
-
-            setMessages(newArr);
-
-            setTempMessage([]);
-            */
-        }
-    }, [latestMessage5])
-
+    const fetcher = (...args: [
+        "/api/messages", { method: string; body: string; headers: { 'Content-Type': string; }; }
+    ]) => fetch(...args).then((res) => res.json());
+    const { data: postMessage } = useSWR('/api/messages', fetcher);
 
     const handleSubmit = async(e: any) => {
         e.preventDefault();
@@ -145,13 +66,14 @@ export default function MessageBoard() {
 
             setMessage('');
 
-            await fetch('/api/messages', {
+            await fetcher('/api/messages', {
                 method: 'POST',
                 body: JSON.stringify(newMessage),
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
+            mutate('/api/messages');
 
             // Set temporary message until latest message is fetched
             setShowTempMessage(true);
